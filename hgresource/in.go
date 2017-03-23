@@ -2,27 +2,28 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"github.com/concourse/hg-resource/hg"
+	"io"
 )
 
 const cmdInName string = "in"
+
 var cmdIn = &Command{
-	Name: cmdInName,
-	Run: runIn,
+	Name:    cmdInName,
+	Run:     runIn,
 	NumArgs: 1,
-	Usage: inUsage,
+	Usage:   inUsage,
 }
 
 func runIn(args []string, params *JsonInput, outWriter io.Writer, errWriter io.Writer) int {
 	destination := args[0]
 
 	repo := &hg.Repository{
-		Path: destination,
-		Branch: params.Source.Branch,
-		IncludePaths: params.Source.IncludePaths,
-		ExcludePaths: params.Source.ExcludePaths,
-		TagFilter: params.Source.TagFilter,
+		Path:                destination,
+		Branch:              params.Source.Branch,
+		IncludePaths:        params.Source.IncludePaths,
+		ExcludePaths:        params.Source.ExcludePaths,
+		TagFilter:           params.Source.TagFilter,
 		SkipSslVerification: params.Source.SkipSslVerification,
 	}
 

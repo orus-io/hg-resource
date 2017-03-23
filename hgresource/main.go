@@ -93,7 +93,7 @@ func getHandlerByFirstArgument(args []string) (appName string, handler *Command,
 }
 
 func getHandler(name string) (*Command, error) {
-	for _, cmd := range (commands) {
+	for _, cmd := range commands {
 		if cmd.Name == name {
 			return cmd, nil
 		}
@@ -103,7 +103,7 @@ func getHandler(name string) (*Command, error) {
 
 func makeUsage() string {
 	var commandNames []string
-	for _, cmd := range (commands) {
+	for _, cmd := range commands {
 		commandNames = append(commandNames, cmd.Name)
 	}
 

@@ -1,22 +1,23 @@
 package main
 
 import (
-	"io"
 	"fmt"
 	"github.com/concourse/hg-resource/hg"
-	"path"
-	"os"
+	"io"
 	"io/ioutil"
-	"time"
+	"os"
+	"path"
 	"strings"
+	"time"
 )
 
 const cmdOutName string = "out"
+
 var cmdOut = &Command{
-	Name: cmdOutName,
-	Run: runOut,
+	Name:    cmdOutName,
+	Run:     runOut,
 	NumArgs: 1,
-	Usage: outUsage,
+	Usage:   outUsage,
 }
 
 type PushParams struct {
@@ -39,8 +40,8 @@ func runOut(args []string, input *JsonInput, outWriter io.Writer, errWriter io.W
 	}
 
 	sourceRepo := &hg.Repository{
-		Path: validatedParams.SourcePath,
-		Branch: validatedParams.Branch,
+		Path:                validatedParams.SourcePath,
+		Branch:              validatedParams.Branch,
 		SkipSslVerification: input.Source.SkipSslVerification,
 	}
 
@@ -84,7 +85,7 @@ func runOut(args []string, input *JsonInput, outWriter io.Writer, errWriter io.W
 func rebaseAndPush(tempRepo *hg.Repository, params PushParams, maxRetries int, errWriter io.Writer) (jsonOutput JsonOutput, err error) {
 	for pushAttempt := 0; pushAttempt < maxRetries; pushAttempt++ {
 		var output []byte
-		fmt.Fprintf(errWriter, "rebasing, attempt %d/%d...\n", pushAttempt + 1, maxRetries)
+		fmt.Fprintf(errWriter, "rebasing, attempt %d/%d...\n", pushAttempt+1, maxRetries)
 		output, err = tempRepo.PullWithRebase(params.DestUri, params.Branch)
 		errWriter.Write(output)
 		if err != nil {
@@ -149,7 +150,7 @@ func getJsonOutputForCurrentCommit(repo *hg.Repository) (output JsonOutput, err 
 
 func isNonFastForwardError(hgStderr string) bool {
 	lines := strings.Split(hgStderr, "\n")
-	for _, line := range (lines) {
+	for _, line := range lines {
 		if strings.HasPrefix(line, "abort: push creates new remote head") {
 			return true
 		}
@@ -163,8 +164,8 @@ func cloneAtCommitIntoTempDir(sourceRepo *hg.Repository, commitId string, errWri
 		return
 	}
 	tempRepo = &hg.Repository{
-		Path: tempRepoDir,
-		Branch: sourceRepo.Branch,
+		Path:                tempRepoDir,
+		Branch:              sourceRepo.Branch,
 		SkipSslVerification: sourceRepo.SkipSslVerification,
 	}
 	cleanupFunc = func(errWriter io.Writer) {
@@ -196,9 +197,9 @@ func validateInput(input *JsonInput, sourceDir string) (validated PushParams, er
 		input.Source.Uri, "uri in resources[repo].source",
 		input.Params.Repository, "repository in <put step>.params",
 	}
-	for i, value := range (requiredParams) {
+	for i, value := range requiredParams {
 		if len(value) == 0 {
-			err = fmt.Errorf("Error: invalid configuration (missing %s)", requiredParams[i + 1])
+			err = fmt.Errorf("Error: invalid configuration (missing %s)", requiredParams[i+1])
 			return
 		}
 	}

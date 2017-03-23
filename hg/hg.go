@@ -1,13 +1,13 @@
 package hg
 
 import (
-	"os/exec"
-	"fmt"
-	"strings"
-	"os"
 	"encoding/json"
-	"time"
+	"fmt"
+	"os"
+	"os/exec"
 	"path"
+	"strings"
+	"time"
 )
 
 type Repository struct {
@@ -26,13 +26,13 @@ type CommitProperty struct {
 }
 
 type HgChangeset struct {
-	Rev       int `json:"rev"`
-	Node      string `json:"node"`
-	Branch    string `json:"branch"`
-	Phase     string `json:"phase"`
-	User      string `json:"user"`
-	Date      []int64 `json:"date"`
-	Desc      string `json:"desc"`
+	Rev       int      `json:"rev"`
+	Node      string   `json:"node"`
+	Branch    string   `json:"branch"`
+	Phase     string   `json:"phase"`
+	User      string   `json:"user"`
+	Date      []int64  `json:"date"`
+	Desc      string   `json:"desc"`
 	Bookmarks []string `json:"bookmarks"`
 	Tags      []string `json:"tags"`
 	Parents   []string `json:"parents"`
@@ -297,7 +297,7 @@ func parseHgTime(hgTime []int64) (parsedTime time.Time, err error) {
 	utcTime := time.Unix(utcEpoch, 0)
 
 	// for some reason, mercurial uses the inverse sign on the offset
-	zone := time.FixedZone("internet time", -1 * int(offset))
+	zone := time.FixedZone("internet time", -1*int(offset))
 
 	parsedTime = utcTime.In(zone)
 	return
@@ -315,25 +315,25 @@ func (commit *HgChangeset) toCommitProperties() (metadata []CommitProperty, err 
 
 	metadata = append(metadata,
 		CommitProperty{
-			Name: "commit",
+			Name:  "commit",
 			Value: commit.Node,
 		},
 		CommitProperty{
-			Name: "author",
+			Name:  "author",
 			Value: commit.User,
 		},
 		CommitProperty{
-			Name: "author_date",
+			Name:  "author_date",
 			Value: timeToIso8601(timestamp),
-			Type: "time",
+			Type:  "time",
 		},
 		CommitProperty{
-			Name: "message",
+			Name:  "message",
 			Value: commit.Desc,
-			Type: "message",
+			Type:  "message",
 		},
 		CommitProperty{
-			Name: "tags",
+			Name:  "tags",
 			Value: strings.Join(commit.Tags, ", "),
 		},
 	)
@@ -358,7 +358,7 @@ func parseMetadata(hgJsonOutput []byte) (metadata []CommitProperty, err error) {
 }
 
 func (self *Repository) run(command string, args []string) (cmd *exec.Cmd, output []byte, err error) {
-	hgArgs := make([]string, 1, len(args) + 1)
+	hgArgs := make([]string, 1, len(args)+1)
 	hgArgs[0] = command
 
 	if self.SkipSslVerification && commandTakesInsecureOption(command) {
@@ -378,7 +378,7 @@ func commandTakesInsecureOption(command string) bool {
 		"pull",
 		"push",
 	}
-	for _, eligibleCommand := range (eligibleCommands) {
+	for _, eligibleCommand := range eligibleCommands {
 		if command == eligibleCommand {
 			return true
 		}
@@ -404,7 +404,7 @@ func (self *Repository) makeExcludeQueryFragment() string {
 
 func unionOfPaths(paths []string) string {
 	escapedPaths := make([]string, len(paths))
-	for i, path := range (paths) {
+	for i, path := range paths {
 		escapedPaths[i] = "file('re:" + escapePath(path) + "')"
 	}
 	return strings.Join(escapedPaths, "|")

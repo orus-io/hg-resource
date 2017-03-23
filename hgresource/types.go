@@ -1,21 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"encoding/json"
-	"io"
 	"bytes"
+	"encoding/json"
+	"fmt"
 	"github.com/concourse/hg-resource/hg"
+	"io"
 )
 
 type Source struct {
-	Uri string `json:"uri"`
-	PrivateKey string `json:"private_key"`
-	IncludePaths []string `json:"paths"`
-	ExcludePaths []string `json:"ignore_paths"`
-	Branch string `json:"branch"`
-	TagFilter string `json:"tag_filter"`
-	SkipSslVerification bool `json:"skip_ssl_verification"`
+	Uri                 string   `json:"uri"`
+	PrivateKey          string   `json:"private_key"`
+	IncludePaths        []string `json:"paths"`
+	ExcludePaths        []string `json:"ignore_paths"`
+	Branch              string   `json:"branch"`
+	TagFilter           string   `json:"tag_filter"`
+	SkipSslVerification bool     `json:"skip_ssl_verification"`
 }
 
 type Version struct {
@@ -24,20 +24,20 @@ type Version struct {
 
 type Params struct {
 	Repository string `json:"repository"`
-	Tag string `json:"tag"`
-	TagPrefix string `json:"tag_prefix"`
-	Rebase bool `json:"rebase"`
+	Tag        string `json:"tag"`
+	TagPrefix  string `json:"tag_prefix"`
+	Rebase     bool   `json:"rebase"`
 }
 
 type JsonInput struct {
-	Source  Source `json:"source"`
+	Source  Source  `json:"source"`
 	Version Version `json:"version"`
-	Params Params `json:"params"`
+	Params  Params  `json:"params"`
 }
 
 type JsonOutput struct {
 	Metadata []hg.CommitProperty `json:"metadata"`
-	Version Version `json:"version"`
+	Version  Version             `json:"version"`
 }
 
 func parseInput(inReader io.Reader) (*JsonInput, error) {

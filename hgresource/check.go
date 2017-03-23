@@ -1,26 +1,27 @@
 package main
 
 import (
-	"io"
-	"github.com/concourse/hg-resource/hg"
 	"fmt"
+	"github.com/concourse/hg-resource/hg"
+	"io"
 	"path"
 )
 
 const cmdCheckName string = "check"
+
 var cmdCheck = &Command{
-	Name: cmdCheckName,
-	Run: runCheck,
+	Name:    cmdCheckName,
+	Run:     runCheck,
 	NumArgs: 0,
 }
 
 func runCheck(args []string, params *JsonInput, outWriter io.Writer, errWriter io.Writer) int {
 	repo := hg.Repository{
-		Path: getCacheDir(),
-		Branch: params.Source.Branch,
-		IncludePaths: params.Source.IncludePaths,
-		ExcludePaths: params.Source.ExcludePaths,
-		TagFilter: params.Source.TagFilter,
+		Path:                getCacheDir(),
+		Branch:              params.Source.Branch,
+		IncludePaths:        params.Source.IncludePaths,
+		ExcludePaths:        params.Source.ExcludePaths,
+		TagFilter:           params.Source.TagFilter,
 		SkipSslVerification: params.Source.SkipSslVerification,
 	}
 
@@ -80,7 +81,7 @@ func writeCommitsSince(parentCommit string, repo *hg.Repository, outWriter io.Wr
 	}
 
 	commitList := make([]Version, len(commits))
-	for i, commit := range (commits) {
+	for i, commit := range commits {
 		commitList[i] = Version{
 			Ref: commit,
 		}

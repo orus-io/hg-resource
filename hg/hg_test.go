@@ -8,7 +8,7 @@ import (
 
 var _ = Describe("Hg", func() {
 	repo := Repository{
-		Path: "/path/to/repo",
+		Path:   "/path/to/repo",
 		Branch: "a_branch",
 		IncludePaths: []string{
 			"/path/1",

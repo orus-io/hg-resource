@@ -3,9 +3,9 @@ package main
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"io/ioutil"
 	"os"
 	"path"
-	"io/ioutil"
 	"strconv"
 	"syscall"
 )
@@ -105,7 +105,6 @@ var _ = Describe("Ssh", func() {
 
 		It("can find the users home directory", func() {
 			homeDir, err := getHomeDir()
-
 
 			Expect(err).To(BeNil())
 			Expect(homeDir).To(Equal("/some/home/directory"))

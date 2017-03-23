@@ -1,23 +1,23 @@
 package main
 
 import (
-	"os"
-	"path"
-	"fmt"
+	"bytes"
 	"crypto/rand"
 	"encoding/base32"
+	"fmt"
+	"os"
 	"os/exec"
-	"bytes"
-	"strings"
+	"path"
 	"strconv"
+	"strings"
 )
 
 const (
-	tempDirEnv = "TMPDIR"
-	defaultTempDir = "/tmp"
-	keyFileName = "hg-resource-private-key"
-	sshAskpassPath = "/opt/resource/askpass.sh"
-	sshClientConfig = "StrictHostKeyChecking no\nLogLevel quiet\n"
+	tempDirEnv                  = "TMPDIR"
+	defaultTempDir              = "/tmp"
+	keyFileName                 = "hg-resource-private-key"
+	sshAskpassPath              = "/opt/resource/askpass.sh"
+	sshClientConfig             = "StrictHostKeyChecking no\nLogLevel quiet\n"
 	sshClientConfigFileRelative = ".ssh/config"
 )
 
@@ -69,7 +69,7 @@ func addSshKey(keyFilePath string) error {
 	stderr := new(bytes.Buffer)
 	addCmd := exec.Command("ssh-add", keyFilePath)
 	addCmd.Env = append(addCmd.Env, os.Environ()...)
-	addCmd.Env = append(addCmd.Env, "DISPLAY=", "SSH_ASKPASS=" + sshAskpassPath)
+	addCmd.Env = append(addCmd.Env, "DISPLAY=", "SSH_ASKPASS="+sshAskpassPath)
 	addCmd.Stderr = stderr
 	err := addCmd.Run()
 	if err != nil {
@@ -126,7 +126,7 @@ func killSshAgent() error {
 
 func setEnvironmentVariablesFromString(multiLine string) {
 	lines := strings.Split(multiLine, "\n")
-	for _, line := range (lines) {
+	for _, line := range lines {
 		// we don't support any kind of quoting or escaping
 		lineBeforeSemicolon := strings.SplitN(line, ";", 2)
 		keyValue := strings.SplitN(lineBeforeSemicolon[0], "=", 2)
