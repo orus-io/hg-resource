@@ -336,6 +336,10 @@ func (commit *HgChangeset) toCommitProperties() (metadata []CommitProperty, err 
 			Name: "tags",
 			Value: strings.Join(commit.Tags, ", "),
 		},
+		CommitProperty{
+			Name:  "bookmarks",
+			Value: strings.Join(commit.Bookmarks, ", "),
+		},
 	)
 
 	return
