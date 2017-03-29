@@ -1,6 +1,9 @@
 [ui]
 username = User Name <user@example.com>
 
+[phases]
+publish = false
+
 [extensions]
 evolve = /evolve/hgext3rd/evolve
 topic = /evolve/hgext3rd/topic
